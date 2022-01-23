@@ -1,0 +1,564 @@
+(Part One)
+
+1. Total number of records for each of the tables below:
+
+Attribute table = 10000
+
+    SELECT count(*) FROM attribute
+
+Business table = 10000
+
+    SELECT count(*) FROM business
+
+Category table = 10000
+
+    SELECT count(*) FROM category
+
+Checkin table = 10000
+
+    SELECT count(*) FROM checkin
+
+elite_years table = 10000
+
+    SELECT count(*) FROM elite_years
+
+friend table = 10000
+
+    SELECT count(*) FROM friend
+
+hours table = 10000
+
+    SELECT count(*) FROM hours
+
+photo table = 10000
+
+    SELECT count(*) FROM photo
+
+review table = 10000
+
+    SELECT count(*) FROM review
+
+tip table = 10000
+
+    SELECT count(*) FROM tip
+
+user table = 10000
+
+    SELECT count(*) FROM user
+
+
+
+
+2. Total distinct records by either the foreign key or primary key for each table.
+
+Business = 10000 (id)
+
+    SELECT count(distinct id) FROM business
+
+Hours = 1562 (business_id)
+
+    SELECT count(distinct business_id) FROM hours
+
+    Category = 2643 (business_id)
+
+    SELECT count(distinct business_id) FROM category
+
+    Attribute = 1115 (business_id)
+
+    SELECT count(distinct business_id) FROM attribute
+
+    Review = 10000 (id), 8090 (business_id), 9581 (user_id)
+
+    SELECT count(distinct id), count(distinct business_id), count(distinct user_id) FROM review
+
+    Checkin = 493 (business_id)
+
+    SELECT count(distinct business_id) FROM checkin
+
+    Photo = 10000 (id), 6493 (business_id)
+
+    SELECT count(distinct id), count(distinct business_id) FROM photo
+
+    Tip = 3979 (business_id), 537 (user_id)
+
+    SELECT count(distinct business_id), count(distinct user_id) FROM tip
+
+    User = 10000 (id)
+
+    SELECT count(distinct id) FROM user
+
+    Friend = 11 (user_id)
+
+    SELECT count(distinct user_id) FROM friend
+
+    Elite_years = 2780 (user_id)
+
+    SELECT count(distinct user_id) FROM elite_years
+
+
+
+3. Any columns with null values in the Users table? 
+
+Answer: no
+
+SQL code used to arrive at answer:
+
+SELECT count(*) - count(id),
+   count(*) - count(name),
+   count(*) - count(review_count),
+   count(*) - count(yelping_since),
+   count(*) - count(useful),
+   count(*) - count(cool),
+   count(*) - count(fans),
+   count(*) - count(average_stars),
+   count(*) - count(compliment_hot),
+   count(*) - count(compliment_more),
+   count(*) - count(compliment_profile),
+   count(*) - count(compliment_cute),
+   count(*) - count(compliment_list),
+   count(*) - count(compliment_note),
+   count(*) - count(compliment_plain),
+   count(*) - count(compliment_cool),
+   count(*) - count(compliment_funny),
+   count(*) - count(compliment_writer),
+   count(*) - count(compliment_photos)
+FROM user
+
+
+
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+    Table: Review, Column: Stars
+
+min: 1 max: 5 avg: 3.7082
+
+SELECT min(stars), max(stars), avg(stars) FROM review
+
+    Table: Business, Column: Stars
+
+min: 1 max: 5 avg: 3.6549
+
+SELECT min(stars), max(stars), avg(stars) FROM business
+
+    Table: Tip, Column: Likes
+
+min: 0 max: 2 avg: 0.0144
+
+SELECT min(likes), max(likes), avg(likes) FROM tip
+
+    Table: Checkin, Column: Count
+
+min: 1 max: 53 avg: 1.9414
+
+SELECT min(count), max(count), avg(count) FROM checkin
+
+    Table: User, Column: Review_count
+
+min: 0 max: 2000 avg: 24.2995
+
+SELECT min(review_count), max(review_count), avg(review_count) FROM user
+
+
+
+5. List the cities with the most reviews in descending order:
+
+SQL code used to arrive at answer:
+
+SELECT sum(review_count) AS total_reviews, city
+FROM business
+GROUP BY city
+ORDER BY total_reviews DESC
+
+Results Below:
+
++---------------+-----------------+
+| total_reviews | city            |
++---------------+-----------------+
+|         82854 | Las Vegas       |
+|         34503 | Phoenix         |
+|         24113 | Toronto         |
+|         20614 | Scottsdale      |
+|         12523 | Charlotte       |
+|         10871 | Henderson       |
+|         10504 | Tempe           |
+|          9798 | Pittsburgh      |
+|          9448 | Montréal        |
+|          8112 | Chandler        |
+|          6875 | Mesa            |
+|          6380 | Gilbert         |
+|          5593 | Cleveland       |
+|          5265 | Madison         |
+|          4406 | Glendale        |
+|          3814 | Mississauga     |
+|          2792 | Edinburgh       |
+|          2624 | Peoria          |
+|          2438 | North Las Vegas |
+|          2352 | Markham         |
+|          2029 | Champaign       |
+|          1849 | Stuttgart       |
+|          1520 | Surprise        |
+|          1465 | Lakewood        |
+|          1155 | Goodyear        |
++---------------+-----------------+
+(Output limit exceeded, 25 of 362 total rows shown)
+
+
+
+
+6. Distribution of star ratings to the business in the following cities:
+
+Avon
+
+SQL code used to arrive at answer:
+
+SELECT stars AS star_rating, count(stars) AS count
+FROM business
+WHERE city='Avon'
+GROUP BY stars
+
+Table Below (2 columns – star rating and count):
+
++-------------+-------+
+| star_rating | count |
++-------------+-------+
+|         1.5 |     1 |
+|         2.5 |     2 |
+|         3.5 |     3 |
+|         4.0 |     2 |
+|         4.5 |     1 |
+|         5.0 |     1 |
++-------------+-------+
+
+Beachwood
+
+SQL code used to arrive at answer:
+
+SELECT stars AS star_rating, count(stars) AS count
+FROM business
+WHERE city='Beachwood'
+GROUP BY stars
+
+Table Below (2 columns – star rating and count):
+
++-------------+-------+
+| star_rating | count |
++-------------+-------+
+|         2.0 |     1 |
+|         2.5 |     1 |
+|         3.0 |     2 |
+|         3.5 |     2 |
+|         4.0 |     1 |
+|         4.5 |     2 |
+|         5.0 |     5 |
++-------------+-------+
+
+
+
+7. Find the top 3 users based on their total number of reviews:
+
+SQL code used to arrive at answer:
+
+SELECT name, sum(review_count) AS total_count
+FROM user
+GROUP BY id
+ORDER BY total_count DESC
+LIMIT 3
+
+Result Below:
+
++--------+-------------+
+| name   | total_count |
++--------+-------------+
+| Gerald |        2000 |
+| Sara   |        1629 |
+| Yuri   |        1339 |
++--------+-------------+
+
+
+
+8. Does posing more reviews correlate with more fans?
+
+Please explain your findings and interpretation of the results:
+
+Yes, there is a correlation. Users with more reviews have more fans.
+
+SQL code:
+
+SELECT range AS fans_range, 
+       COUNT(*) AS num_user, 
+       AVG(review_count) AS avg_num_review,     
+       AVG(fans) AS avg_num_fans
+FROM (SELECT CASE WHEN fans BETWEEN 0 AND 9 THEN '0 - 9'
+                  WHEN fans BETWEEN 10 AND 99 THEN '10 - 99'
+                  ELSE '100-1000' END AS range,
+             review_count, 
+             fans
+      FROM user) AS subtable
+GROUP BY subtable.range
+
+Result:
+
++------------+----------+----------------+----------------+
+| fans_range | num_user | avg_num_review |   avg_num_fans |
++------------+----------+----------------+----------------+
+| 0 - 9      |     9690 |  15.0085655315 | 0.447265221878 |
+| 10 - 99    |      294 |  283.326530612 |  25.5986394558 |
+| 100-1000   |       16 |          891.5 |         189.75 |
++------------+----------+----------------+----------------+
+
+
+
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+Answer: There are more reviews with the word "love"
+
+SQL code used to arrive at answer:
+
+SELECT reaction, count(*) count
+FROM (
+      SELECT CASE WHEN LOWER(text) LIKE '%love%' THEN 'love'
+                  WHEN LOWER(text) LIKE '%hate%' THEN 'hate' 
+                  ELSE NULL END AS reaction
+      FROM review)
+GROUP BY reaction
+ORDER BY count DESC
+
+Result:
+
++----------+-------+
+| reaction | count |
++----------+-------+
+|     None |  8042 |
+|     love |  1780 |
+|     hate |   178 |
++----------+-------+
+
+
+
+10. Find the top 10 users with the most fans:
+
+SQL code used to arrive at answer:
+
+SELECT name, fans
+FROM user
+ORDER BY fans DESC
+LIMIT 10
+
+Result Below:
+
++-----------+------+
+| name      | fans |
++-----------+------+
+| Amy       |  503 |
+| Mimi      |  497 |
+| Harald    |  311 |
+| Gerald    |  253 |
+| Christine |  173 |
+| Lisa      |  159 |
+| Cat       |  133 |
+| William   |  126 |
+| Fran      |  124 |
+| Lissa     |  120 |
++-----------+------+
+
+
+
+11. Is there a strong relationship (or correlation) between having a high number of fans and being listed as "useful" or "funny?" Out of the top 10 users with the highest number of fans, what percent are also listed as “useful” or “funny”?
+
+Key:(0% - 25%) - Low relationship, (26% - 75%) - Medium relationship, (76% - 100%) - Strong relationship
+
+SQL code used to arrive at answer:
+
+SELECT name, fans, (useful + funny)*1.0/(useful + funny + cool) AS Per_useful_funny, 
+CASE WHEN (useful + funny)*1.0/(useful + funny + cool) > 0.0 AND 
+          (useful + funny)*1.0/(useful + funny + cool) <=0.25 THEN 'Low'
+     WHEN (useful + funny)*1.0/(useful + funny + cool) > 0.25 AND 
+          (useful + funny)*1.0/(useful + funny + cool) <=0.75 THEN 'Medium'
+     ELSE 'Strong' END AS Key
+FROM user
+ORDER BY fans DESC
+LIMIT 10
+
+Result Below:
+
++-----------+------+------------------+--------+
+| name      | fans | Per_useful_funny | Key    |
++-----------+------+------------------+--------+
+| Amy       |  503 |   0.677529011839 | Medium |
+| Mimi      |  497 |   0.712996389892 | Medium |
+| Harald    |  311 |   0.666268364881 | Medium |
+| Gerald    |  253 |   0.569428505853 | Medium |
+| Christine |  173 |   0.726536295171 | Medium |
+| Lisa      |  159 |   0.910447761194 | Strong |
+| Cat       |  133 |   0.617081850534 | Medium |
+| William   |  126 |   0.666476827792 | Medium |
+| Fran      |  124 |   0.651356292676 | Medium |
+| Lissa     |  120 |   0.638859556494 | Medium |
++-----------+------+------------------+--------+
+
+Please explain your findings and interpretation of the results:
+
+The results show a medium relationship.
+
+(End of Part One)
+
+
+(Part Two)
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+
+City is "Las Vegas" and category is "Shopping".
+
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+SQL code:
+
+SELECT CASE WHEN stars >= 4.0 THEN '4-5 stars'
+            WHEN stars >= 2.0 THEN '2-3 stars'
+            ELSE 'below 2' END AS 'STARS',               
+       COUNT(DISTINCT business.id) AS id_count,            
+       COUNT(hours) AS open_days_total,   -- number of openning days        
+       COUNT(hours)*1.0 / COUNT(DISTINCT business.id)  AS open_days_avg
+FROM ((business INNER JOIN hours ON business.id = hours.business_id)
+     INNER JOIN category ON business.id = category.business_id)
+WHERE city = 'Las Vegas' AND category.category ='Shopping'
+GROUP BY STARS
+
+Result:
+
++-----------+----------+-----------------+---------------+
+| STARS     | id_count | open_days_total | open_days_avg |
++-----------+----------+-----------------+---------------+
+| 2-3 stars |        2 |              13 |           6.5 |
+| 4-5 stars |        2 |              12 |           6.0 |
++-----------+----------+-----------------+---------------+
+
+There is no huge difference between the two groups.
+
+
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+
+SQL code:
+
+SELECT CASE WHEN stars >= 4.0 THEN '4-5 stars'
+            WHEN stars >= 2.0 THEN '2-3 stars'
+            ELSE 'below 2' END AS 'STARS',               
+       COUNT(DISTINCT business.id) AS id_count,            
+       SUM(review_count) AS review_count_total,
+       SUM(review_count)*1.0/COUNT(DISTINCT business.id)  AS review_count_avg
+FROM business INNER JOIN category ON business.id = category.business_id
+WHERE city = 'Las Vegas' AND category.category ='Shopping'
+GROUP BY STARS
+
+Result:
+
++-----------+----------+--------------------+------------------+
+| STARS     | id_count | review_count_total | review_count_avg |
++-----------+----------+--------------------+------------------+
+| 2-3 stars |        2 |                 17 |              8.5 |
+| 4-5 stars |        2 |                 36 |             18.0 |
++-----------+----------+--------------------+------------------+
+
+There is difference in the total number of review between the two groups, (17 & 36). The group with 4~5 stars have doubled compared to the other group.
+
+
+
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+
+SQL code used for analysis:
+
+SELECT CASE WHEN stars >= 4.0 THEN '4-5 stars'
+            WHEN stars >= 2.0 THEN '2-3 stars'
+            ELSE 'below 2' END AS 'STARS',
+       business.neighborhood,
+       business.address,
+       business.postal_code
+FROM business INNER JOIN category ON business.id = category.business_id
+WHERE city = 'Las Vegas' AND category.category ='Shopping'
+ORDER BY STARS
+
+Result:
+
++-----------+--------------+-----------------------------+-------------+
+| STARS     | neighborhood | address                     | postal_code |
++-----------+--------------+-----------------------------+-------------+
+| 2-3 stars | Southeast    | 3421 E Tropicana Ave, Ste I | 89121       |
+| 2-3 stars | Eastside     | 3808 E Tropicana Ave        | 89121       |
+| 4-5 stars |              | 1000 Scenic Loop Dr         | 89161       |
+| 4-5 stars |              | 3555 W Reno Ave, Ste F      | 89118       |
++-----------+--------------+-----------------------------+-------------+
+
+The shops with 2-3 stars are located on Tropicana Ave., but the shops with higher ratings (stars) are far from the shops on Tropicana.
+
+
+
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+
+i. Difference 1: Number of business. There are more businesses that are open compared to the ones that are closed.
+
+ii. Difference 2: Number of review & average of stars. There are more reviews and stars from businesses that are open.
+
+SQL code used for analysis:
+
+SELECT is_open, 
+       count(distinct business.id) num_business, 
+       count(distinct review.id) num_review,
+       avg(review.stars) avg_stars
+FROM business
+JOIN review ON business.id =  review.business_id
+GROUP BY is_open
+
+Result:
+
++---------+--------------+------------+---------------+
+| is_open | num_business | num_review |     avg_stars |
++---------+--------------+------------+---------------+
+|       0 |           61 |         71 | 3.64788732394 |
+|       1 |          446 |        565 |  3.7610619469 |
++---------+--------------+------------+---------------+
+
+
+
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+
+i. Indicate the type of analysis you chose to do:
+
+What is the most successful category of business?
+
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+
+Among the categories, I calculated the average number of stars and the average of open business for each category. I only considered any number of business in each category that
+is greater than 10.
+
+According to the result, "Local Service", "Health & Medica", "Home Services", "Shopping", and "Beauty & Spas" are getting better reviews and higher average opening rate. Other businesses such as "Bars", "Nightlife", and "Restaurants" have lower number of stars and close frequently.
+
+iii. Output of your finished dataset:
+
++------------------------+--------------+-----------+------------+
+| category               | num_business | avg_stars | avg_isopen |
++------------------------+--------------+-----------+------------+
+| Local Services         |           12 |      4.21 |       0.83 |
+| Health & Medical       |           17 |      4.09 |       0.94 |
+| Home Services          |           16 |       4.0 |       0.94 |
+| Shopping               |           30 |      3.98 |       0.83 |
+| Beauty & Spas          |           13 |      3.88 |       0.92 |
+| American (Traditional) |           11 |      3.82 |       0.73 |
+| Food                   |           23 |      3.78 |       0.87 |
+| Bars                   |           17 |       3.5 |       0.65 |
+| Nightlife              |           20 |      3.48 |        0.6 |
+| Restaurants            |           71 |      3.46 |       0.75 |
++------------------------+--------------+-----------+------------+
+
+iv. Provide the SQL code you used to create your final dataset:
+
+SELECT category.category, 
+       count(business.id) num_business, 
+       round(avg(business.stars),2) avg_stars, 
+       round(avg(business.is_open),2) avg_isopen
+FROM (business INNER JOIN category ON business.id = category.business_id)
+GROUP BY category.category
+HAVING num_business > 10
+ORDER BY avg_stars DESC, avg_isopen DESC
